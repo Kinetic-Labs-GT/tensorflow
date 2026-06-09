@@ -424,7 +424,15 @@ TfLiteStatus SqrtEval(TfLiteContext* context, TfLiteNode* node) {
   const TfLiteType type = input->type;
   switch (type) {
     case kTfLiteFloat32:
-      return EvalNumeric(context, node, std::sqrt);
+      return EvalImpl<float>(
+          context, node,
+          [](float f) {
+            if (std::isinf(f) && f > 0) {
+              return std::numeric_limits<float>::infinity();
+            }
+            return std::sqrt(f);
+          },
+          kTfLiteFloat32);
     case kTfLiteInt8:
       return SqrtEvalQuantized<int8_t>(context, node);
     case kTfLiteInt16:
