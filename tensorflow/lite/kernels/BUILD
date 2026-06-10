@@ -1771,6 +1771,18 @@ cc_test(
 )
 
 cc_test(
+    name = "sqrt_test",
+    size = "small",
+    srcs = ["sqrt_test.cc"],
+    deps = [
+        ":test_main",
+        ":test_util",
+        "//tensorflow/lite/schema:schema_fbs",
+        "@com_google_googletest//:gtest",
+    ],
+)
+
+cc_test(
     name = "unidirectional_sequence_lstm_test",
     size = "small",
     srcs = ["unidirectional_sequence_lstm_test.cc"],
