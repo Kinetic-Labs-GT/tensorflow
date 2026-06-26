@@ -1133,23 +1133,6 @@ cc_test(
 )
 
 cc_test(
-    name = "logistic_test",
-    size = "small",
-    srcs = ["logistic_test.cc"],
-    deps = [
-        ":test_main",
-        ":test_util",
-        "//tensorflow/lite:framework_stable",
-        "//tensorflow/lite/core:framework_stable",
-        "//tensorflow/lite/core/api",
-        "//tensorflow/lite/kernels:builtin_ops",
-        "//tensorflow/lite/schema:schema_fbs",
-        "@com_google_googletest//:gtest",
-        "@flatbuffers",
-    ],
-)
-
-cc_test(
     name = "add_test",
     size = "medium",
     srcs = ["add_test.cc"],

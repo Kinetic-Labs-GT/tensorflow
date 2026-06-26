@@ -1256,6 +1256,29 @@ TEST_P(TanhOpTest, TanhInt16General) {
                   kQuantizedToleranceInt16)));
 }
 
+TEST_P(TanhOpTest, TanhFloat32ExtremeInput) {
+  FloatActivationsOpModel<float> m(
+      GetRegistration(), BuiltinOperator_TANH,
+      /*input=*/{TensorType_FLOAT32, {1, 6}});
+  m.SetInput({
+      5e29f,
+      1e25f,
+      -5e29f,
+      -1e25f,
+      std::numeric_limits<float>::max(),
+      -std::numeric_limits<float>::max(),
+  });
+  ASSERT_EQ(m.Invoke(), kTfLiteOk);
+  EXPECT_THAT(m.GetOutput(), ElementsAreArray(ArrayFloatNear({
+                                 1.0f,
+                                 1.0f,
+                                 -1.0f,
+                                 -1.0f,
+                                 1.0f,
+                                 -1.0f,
+                             })));
+}
+
 TEST_P(LogisticOpTest, SigmoidFloat32) {
   FloatActivationsOpModel<float> m(
       GetRegistration(), BuiltinOperator_LOGISTIC,
@@ -1555,6 +1578,29 @@ TEST_P(LogisticOpTest, SigmoidInt16General) {
                   {0.5, 0.002473, 0.880797, 0.982014, 0.524979, 0.999994,  //
                    0.952574, 0.119203, 0.999955, 0.731059, 0.562177, 0},
                   kQuantizedToleranceInt16)));
+}
+
+TEST_P(LogisticOpTest, SigmoidFloat32ExtremeInput) {
+  FloatActivationsOpModel<float> m(
+      GetRegistration(), BuiltinOperator_LOGISTIC,
+      /*input=*/{TensorType_FLOAT32, {1, 6}});
+  m.SetInput({
+      5e29f,
+      1e25f,
+      -5e29f,
+      -1e25f,
+      std::numeric_limits<float>::max(),
+      -std::numeric_limits<float>::max(),
+  });
+  ASSERT_EQ(m.Invoke(), kTfLiteOk);
+  EXPECT_THAT(m.GetOutput(), ElementsAreArray(ArrayFloatNear({
+                                 1.0f,
+                                 1.0f,
+                                 0.0f,
+                                 0.0f,
+                                 1.0f,
+                                 0.0f,
+                             })));
 }
 
 TEST_P(SoftmaxOpTest, Softmax4DInplace) {

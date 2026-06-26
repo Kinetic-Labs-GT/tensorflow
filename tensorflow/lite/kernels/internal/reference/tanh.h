@@ -32,7 +32,9 @@ inline void Tanh(const RuntimeShape& input_shape, const T* input_data,
   const int flat_size = MatchingFlatSize(input_shape, output_shape);
 
   for (int i = 0; i < flat_size; i++) {
-    output_data[i] = static_cast<T>(std::tanh(input_data[i]));
+    const float val = static_cast<float>(input_data[i]);
+    const float clamped_val = std::max(-20.0f, std::min(20.0f, val));
+    output_data[i] = static_cast<T>(std::tanh(clamped_val));
   }
 }
 
